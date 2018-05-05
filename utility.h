@@ -12,10 +12,12 @@ void swap_bytes(void* bytes, int size);
 
 void swap_uint32(uint32_t* value);
 
-int read_bytes(void* dest, int num, FILE* src);
+long read_bytes(void* dst, FILE* src, long num);
 
 int read_uint32_le(uint32_t* dst, FILE* src);
 
 int read_uint32_be(uint32_t* dst, FILE* src);
+
+long write_bytes(FILE* dst, const void* src, long num);
 
 #endif //COS_BYTESWAP_H

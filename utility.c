@@ -20,12 +20,12 @@ void swap_uint32(uint32_t* value)
     swap_bytes(value, sizeof(uint32_t));
 }
 
-int read_bytes(void* dest, int num, FILE* src)
+long read_bytes(void* dst, FILE* src, long num)
 {
     int c;
     int i = 0;
-    for (; i < num && ((c = fgetc(src)) != EOF); ++i)
-        ((uint8_t*)dest)[i] = (uint8_t)c;
+    for (; i < num && ((c = fgetc(src)) != EOF) && !ferror(src); ++i)
+        ((uint8_t*)dst)[i] = (uint8_t)c;
 
     return i;
 }
@@ -33,7 +33,7 @@ int read_bytes(void* dest, int num, FILE* src)
 int read_uint32_le(uint32_t* dst, FILE* src)
 {
     uint32_t tmp_dst;
-    int bytes_read = read_bytes(&tmp_dst, sizeof(uint32_t), src);
+    int bytes_read = read_bytes(&tmp_dst, src, sizeof(uint32_t));
     if (bytes_read == sizeof(uint32_t))
     {
         *dst = tmp_dst;
@@ -52,4 +52,15 @@ int read_uint32_be(uint32_t* dst, FILE* src)
     }
 
     return 0;
+}
+
+long write_bytes(FILE* dst, const void* src, long num)
+{
+    int c;
+    int i = 0;
+    for (; i < num; ++i)
+        if (((c = fputc(((const uint8_t*)src)[i], dst)) == EOF))
+            break;
+
+    return i;
 }
