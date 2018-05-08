@@ -71,7 +71,7 @@ enum qfs_decompress_status qfs_decompress_stream(FILE* stream,
             compressed_bytes_to_read = control_codes[0] & 0x03;
         }
 
-        if (!read_bytes(&(*dst)->data[decompressed_write_offset], stream, compressed_bytes_to_read))
+        if (read_bytes(&(*dst)->data[decompressed_write_offset], stream, compressed_bytes_to_read) != compressed_bytes_to_read)
             return QFS_DECOMPRESS_STATUS_READ_ERROR;
 
         decompressed_write_offset += compressed_bytes_to_read;
@@ -80,7 +80,7 @@ enum qfs_decompress_status qfs_decompress_stream(FILE* stream,
 
         for (long i = 0; i < decompressed_bytes_to_read; ++i)
         {
-            ((uint8_t*)(*dst)->data)[decompressed_write_offset] = ((uint8_t*)(*dst)->data)[decompressed_write_offset - 1 - decompressed_bytes_to_read_offset];
+            ((uint8_t*)(*dst)->data)[decompressed_write_offset] = ((uint8_t*)(*dst)->data)[decompressed_write_offset - decompressed_bytes_to_read_offset];
             decompressed_write_offset++;
         }
     }

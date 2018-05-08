@@ -2,7 +2,12 @@
 // Created by Jonathon Racz on 5/3/18.
 //
 
+#include <string.h>
 #include "utility.h"
+
+#if defined(__linux__) || defined(__APPLE__)
+#include <zconf.h>
+#endif
 
 void swap_bytes(void* bytes, int size)
 {
@@ -33,7 +38,7 @@ long read_bytes(void* dst, FILE* src, long num)
 int read_uint32_le(uint32_t* dst, FILE* src)
 {
     uint32_t tmp_dst;
-    int bytes_read = read_bytes(&tmp_dst, src, sizeof(uint32_t));
+    long bytes_read = read_bytes(&tmp_dst, src, sizeof(uint32_t));
     if (bytes_read == sizeof(uint32_t))
     {
         *dst = tmp_dst;
@@ -63,4 +68,29 @@ long write_bytes(FILE* dst, const void* src, long num)
             break;
 
     return i;
+}
+
+int replace_character(char* string, char char_to_replace, char replacement_char)
+{
+    return replace_characters(string, &char_to_replace, replacement_char);
+}
+
+int replace_characters(char* string, char* chars_to_replace, char replacement_char)
+{
+    int characters_replaced = 0;
+    for (size_t i = 0; i < strlen(string); ++i)
+    {
+        if (strchr(chars_to_replace, string[i]) != NULL)
+        {
+            string[i] = replacement_char;
+            characters_replaced++;
+        }
+    }
+
+    return characters_replaced;
+}
+
+int mkdir_recursive(char* dir, int mode)
+{
+    return mkpath_np(dir, mode);
 }
