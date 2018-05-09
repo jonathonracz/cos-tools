@@ -1,0 +1,63 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+struct Localization
+{
+    char magic[4];
+    LittleEndian();
+    uint64 base_offset;
+    uint32 num_localizations;
+    uint32 localization_offsets[num_localizations];
+};
+
+struct Localization
+{
+    char magic[4];
+    uint64 size;
+    uint32 num_strings;
+};
+
+/*
+struct FileEntry
+{
+    BigEndian();
+    uint32 position <format=hex>;
+    uint32 size;
+    string name;
+
+    local int64 currParsePos = FTell();
+    FSeek(position);
+    local ushort startBytes = ReadUShort();
+    switch (startBytes)
+    {
+        case 0x10FB:
+        {
+            QFSFile qfsFile(size);
+            break;
+        }
+        default: byte data[size];
+    }
+    FSeek(currParsePos);
+};
+*/
+
+Header header;
+
+local uint32 i;
+for (i = 0; i < header.num_localizations; ++i)
+{
+    local int64 currParsePos = FTell();
+    FSeek(position);
+
+    FileEntry entry;
+}

@@ -23,7 +23,7 @@ enum qfs_decompress_status qfs_decompress_stream(FILE* stream,
 
     long destination_offset = ftell(stream) + qfs_file_size - 5;
     long decompressed_write_offset = 0;
-    while (ftell(stream) != destination_offset)
+    while (ftell(stream) < destination_offset)
     {
         int control_code = fgetc(stream);
         if (ferror(stream))
@@ -73,6 +73,7 @@ enum qfs_decompress_status qfs_decompress_stream(FILE* stream,
 
         if (read_bytes(&(*dst)->data[decompressed_write_offset], stream, compressed_bytes_to_read) != compressed_bytes_to_read)
             return QFS_DECOMPRESS_STATUS_READ_ERROR;
+        data_block_dump_to_file(*dst, "dump_progress");
 
         decompressed_write_offset += compressed_bytes_to_read;
         if (decompressed_bytes_to_read > 0 && decompressed_write_offset - decompressed_bytes_to_read_offset < 0)
@@ -82,6 +83,7 @@ enum qfs_decompress_status qfs_decompress_stream(FILE* stream,
         {
             ((uint8_t*)(*dst)->data)[decompressed_write_offset] = ((uint8_t*)(*dst)->data)[decompressed_write_offset - decompressed_bytes_to_read_offset];
             decompressed_write_offset++;
+            data_block_dump_to_file(*dst, "dump_progress");
         }
     }
 

@@ -8,24 +8,20 @@ int main()
 {
     printf("Hello, World!\n");
 
-    bigf_unpack("../../../Downloads/HPCOS.iso01/BIG/DATA.BIG", "./extract", &stream_handler);
-
-    /*
     struct bigf_file_table* table;
-    bigf_file_table_read("../../../Downloads/HPCOS.iso01/BIG/DATA.BIG", &table);
+    bigf_file_table_read("../../../Downloads/HPCOS.iso01/BIG/LOCALE.BIG", &table);
     bigf_file_table_print(table);
 
     struct data_block* extracted_file;
     enum bigf_stream_status stream_status = bigf_stream_file(
-            "../../../Downloads/HPCOS.iso01/BIG/DATA.BIG",
-            "generateddata\\chapters.txt", table, &stream_handler, &extracted_file);
+            "../../../Downloads/HPCOS.iso01/BIG/LOCALE.BIG",
+            "strings.loc", table, &stream_handler, &extracted_file);
 
     assert(stream_status == BIGF_STREAM_STATUS_SUCCESS);
 
-    data_block_dump_to_file(extracted_file, "chapters.txt");
+    data_block_dump_to_file(extracted_file, "strings.loc");
 
     bigf_file_table_free(&table);
-*/
 
     return 0;
 }

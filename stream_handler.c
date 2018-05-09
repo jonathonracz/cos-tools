@@ -19,8 +19,8 @@ enum bigf_stream_handler_status stream_handler(struct data_block** result, FILE*
     }
     else
     {
-        data_block_alloc((int)length);
-        memcpy((*result)->data, first_bytes, sizeof(first_bytes));
+        *result = data_block_alloc((int)length);
+        memcpy((*result)->data, first_bytes, bytes_read);
         long remaining_bytes_read = read_bytes(&((uint8_t*)(*result)->data)[sizeof(first_bytes)], stream, length - sizeof(first_bytes));
         return (bytes_read + remaining_bytes_read == length) ? BIGF_STREAM_HANDLER_STATUS_SUCCESS : BIGF_STREAM_HANDLER_STATUS_FAILURE;
     }
